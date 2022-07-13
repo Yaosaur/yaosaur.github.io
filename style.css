@@ -1,0 +1,35 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid: 150px 50px 1fr 100px/100px 1fr 100px;
+  margin: 0px;
+  background-image: url("images/icecave/icecave.jpg");
+  background-position: center;
+  background-size: cover;
+}
+
+.title {
+  grid-area: 1/2/2/3;
+}
+
+.display {
+  grid-area: 2/2/3/3;
+}
+
+canvas {
+  grid-area: 3/2/4/3;
+  border: 2px solid black;
+}
+
+.gameOver {
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid black;
+  border-radius: 10px;
+  display: none;
+}
