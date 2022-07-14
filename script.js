@@ -153,6 +153,12 @@ function endGame() {
   time.textContent = `Time: ${(new Date() - startTime) / 1000} seconds`;
 }
 
+function clearImages() {
+  images = [];
+  imagesSub = [];
+  imagesAni = [];
+}
+
 function moveIcicles() {
   for (image of images) {
     image.xCord += image.dx;
@@ -204,16 +210,6 @@ function moveSqur() {
   if (yCordS < canvas.height - 150) {
     dy = -dy;
   }
-
-  //   let newTime = new Date();
-  //   if (newTime - lastTimeS > 1000) {
-  //     image = imagesAni[2];
-  //     yCordS = yCordS;
-  //     context.drawImage(image, xCordS, yCordS, 50, 100);
-  //   } else {
-
-  //   }
-  // }
   if (dy > 0) {
     image = imagesAni[1];
   } else {
@@ -374,21 +370,20 @@ setTimeout(function () {
   cancelAnimationFrame(animationID);
   context.clearRect(0, 0, canvas.width, canvas.height);
   body.style.backgroundImage = "url('images/forest/forest.jpg')";
-  if (images.length !== 0) {
-    images = [];
-  }
-  init(
-    forestSources,
-    10,
-    0,
-    canvas.width - 100,
-    canvas.height * 0.15,
-    canvas.height * 0.3,
-    3,
-    5,
-    3,
-    5
-  );
+  clearImages();
+  if (imagesAni)
+    init(
+      forestSources,
+      10,
+      0,
+      canvas.width - 100,
+      canvas.height * 0.15,
+      canvas.height * 0.3,
+      3,
+      5,
+      3,
+      5
+    );
   initAnimate(forestSourcesSqur, 25, canvas.height - 100, 2, 4, 0, 0);
   animateForest();
 }, randomNum(5000, 10000));
@@ -397,9 +392,7 @@ setTimeout(function () {
   cancelAnimationFrame(animationID);
   context.clearRect(0, 0, canvas.width, canvas.height);
   body.style.backgroundImage = "url('images/city/streets.jpg')";
-  if (images.length !== 0) {
-    images = [];
-  }
+  clearImages();
   init(
     citySources,
     3,

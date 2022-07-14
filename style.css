@@ -7,14 +7,26 @@ body {
   background-image: url("images/icecave/icecave.jpg");
   background-position: center;
   background-size: cover;
+  font-family: "Fredoka One", cursive;
 }
 
 .title {
   grid-area: 1/2/2/3;
+  font-size: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .display {
   grid-area: 2/2/3/3;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.time {
+  font-size: 2vh;
 }
 
 canvas {
