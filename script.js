@@ -152,15 +152,11 @@ function moveIcicles() {
   for (image of images) {
     image.xCord += image.dx;
     image.yCord += image.dy;
-    if (image.yCord + 100 > canvas.height) {
-      image.yCord = randomNum(0, 0);
-      setTimeout(
-        context.drawImage(image, image.xCord, image.yCord, 100, 100),
-        randomNum(500, 2000)
-      );
-    } else {
-      context.drawImage(image, image.xCord, image.yCord, 100, 100);
+    if (image.yCord + 100 > canvas.height + randomNum(200, 500)) {
+      image.xCord = randomNum(0, canvas.width - 100);
+      image.yCord = randomNum(-100, 0);
     }
+    context.drawImage(image, image.xCord, image.yCord, 50, 125);
     if (
       player.x + player.radius > image.xCord &&
       player.x - player.radius < image.xCord + 100 &&
@@ -304,70 +300,57 @@ function animateCity() {
   animationID = requestAnimationFrame(animateCity);
   context.clearRect(0, 0, canvas.width, canvas.height);
   player.draw();
-  // moveCars();
-  // moveBirds();
+  moveCars();
+  moveBirds();
   movePeople();
 }
 
-// init(iceSources, 9, 0, canvas.width - 100, 0, 200, 0, 0, 3, 5);
-// animateIce();
+init(iceSources, 12, 0, canvas.width - 100, 0, 200, 0, 0, 3, 5);
+animateIce();
 
-// setTimeout(function () {
-//   cancelAnimationFrame(animationID);
-//   context.clearRect(0, 0, canvas.width, canvas.height);
-//   body.style.backgroundImage = "url('images/forest/forest.jpg')";
-//   while (images.length > 0) {
-//     images.pop();
-//   }
-//   init(forestSources, 10, 0, canvas.width - 100, 0, 200, 3, 5, 3, 5);
-//   animateForest();
-// }, randomNum(5000, 10000));
+setTimeout(function () {
+  cancelAnimationFrame(animationID);
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  body.style.backgroundImage = "url('images/forest/forest.jpg')";
+  if (images.length !== 0) {
+    images = [];
+  }
+  init(forestSources, 10, 0, canvas.width - 100, 0, 200, 3, 5, 3, 5);
+  animateForest();
+}, randomNum(5000, 10000));
 
-// setTimeout(function () {
-//   cancelAnimationFrame(animationID);
-//   context.clearRect(0, 0, canvas.width, canvas.height);
-//   body.style.backgroundImage = "url('images/city/streets.jpg')";
-//   while (images.length > 0) {
-//     images.pop();
-//   }
-// init(
-//   citySources,
-//   3,
-//   canvas.width - 100,
-//   canvas.width - 100,
-//   300,
-//   canvas.height - 100,
-//   3,
-//   5,
-//   0,
-//   0
-// );
-//   animateCity();
-// }, randomNum(15000, 20000));
-init(
-  citySources,
-  3,
-  canvas.width - 150,
-  canvas.width - 200,
-  canvas.height * 0.6,
-  canvas.height * 0.65,
-  3,
-  7,
-  0,
-  0
-);
-init2(citySourcesBirds, 4, 0, canvas.width - 100, 50, 150, -3, -10, 1, 1);
-initAnimate(
-  citySourcesGirl,
-  canvas.width - 150,
-  canvas.height * 0.7,
-  -2,
-  -4,
-  0.5,
-  0.5
-);
+setTimeout(function () {
+  cancelAnimationFrame(animationID);
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  body.style.backgroundImage = "url('images/city/streets.jpg')";
+  if (images.length !== 0) {
+    images = [];
+  }
+  init(
+    citySources,
+    3,
+    canvas.width - 150,
+    canvas.width - 200,
+    canvas.height * 0.6,
+    canvas.height * 0.65,
+    3,
+    7,
+    0,
+    0
+  );
+  init2(citySourcesBirds, 4, 0, canvas.width - 100, 50, 150, -3, -10, 1, 1);
+  initAnimate(
+    citySourcesGirl,
+    canvas.width - 150,
+    canvas.height * 0.7,
+    -2,
+    -4,
+    0.5,
+    0.5
+  );
+  animateCity();
+}, randomNum(15000, 20000));
 
-animateCity();
 //Notes for self
 
 // context.beginPath();

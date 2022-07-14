@@ -4,7 +4,7 @@ body {
   display: grid;
   grid: 150px 50px 1fr 100px/100px 1fr 100px;
   margin: 0px;
-  background-image: url("images/city/streets.jpg");
+  background-image: url("images/icecave/icecave.jpg");
   background-position: center;
   background-size: cover;
 }
