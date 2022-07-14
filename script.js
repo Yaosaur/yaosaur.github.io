@@ -36,14 +36,19 @@ class Circle {
 
 let player = new Circle(canvas.width / 2, canvas.height / 2, 25);
 let iceSources = [
-  "images/icecave/icicles/icy1.jpg",
-  "images/icecave/icicles/icy2.jpg",
-  "images/icecave/icicles/icy3.jpg",
-  "images/icecave/icicles/icy4.jpg",
-  "images/icecave/icicles/icy5.jpg",
-  "images/icecave/icicles/icy6.jpg",
+  "images/icecave/icicles/icy1.png",
+  "images/icecave/icicles/icy2.png",
+  "images/icecave/icicles/icy3.png",
+  "images/icecave/icicles/icy4.png",
+  "images/icecave/icicles/icy5.png",
+  "images/icecave/icicles/icy6.png",
 ];
 let forestSources = ["images/forest/butterflyswarm.png"];
+let forestSourcesSqur = [
+  "images/forest/sq1.png",
+  "images/forest/sq2.png",
+  "images/forest/sq3.png",
+];
 let citySources = [
   "images/city/car1.png",
   "images/city/car2.png",
@@ -54,7 +59,7 @@ let citySourcesBirds = ["images/city/pigeon1.png"];
 let citySourcesGirl = ["images/city/girl1.png", "images/city/girl2.png"];
 let images = [];
 let imagesSub = [];
-let imagesSub2 = [];
+let imagesAni = [];
 
 canvas.addEventListener("mousemove", (event) => {
   player.x = event.offsetX;
@@ -138,7 +143,7 @@ function initAnimate(sources, xCord, yCord, dxMin, dxMax, dyMin, dyMax) {
     image.onload = () => {
       context.drawImage(image, image.xCord, image.yCord);
     };
-    imagesSub2.push(image);
+    imagesAni.push(image);
   }
 }
 
@@ -172,13 +177,9 @@ function moveButterflies() {
   for (image of images) {
     image.xCord += image.dx;
     image.yCord += image.dy;
-    if (
-      image.xCord + 100 > canvas.width ||
-      image.yCord + 100 > canvas.height ||
-      image.xCord < 0 ||
-      image.yCord < 0
-    ) {
+    if (image.xCord + 100 > canvas.width || image.xCord < 0) {
       image.dx = -image.dx;
+    } else if (image.yCord < 0 || image.yCord + 100 > canvas.height * 0.6) {
       image.dy = -image.dy;
     }
     if (
@@ -189,7 +190,67 @@ function moveButterflies() {
     ) {
       endGame();
     }
-    context.drawImage(image, image.xCord, image.yCord, 100, 100);
+    context.drawImage(image, image.xCord, image.yCord, 125, 125);
+  }
+}
+
+let xCordS = 0;
+let yCordS = canvas.height - 100;
+let dy = randomNum(-1, -2);
+let lastTimeS = 0;
+let framesStopped = 0;
+function moveSqur() {
+  let image = undefined;
+  if (yCordS < canvas.height - 150) {
+    dy = -dy;
+  }
+
+  //   let newTime = new Date();
+  //   if (newTime - lastTimeS > 1000) {
+  //     image = imagesAni[2];
+  //     yCordS = yCordS;
+  //     context.drawImage(image, xCordS, yCordS, 50, 100);
+  //   } else {
+
+  //   }
+  // }
+  if (dy > 0) {
+    image = imagesAni[1];
+  } else {
+    image = imagesAni[0];
+  }
+  if (yCordS > canvas.height - 100) {
+    if (framesStopped < 60) {
+      image = imagesAni[2];
+      yCordS = yCordS;
+      xCordS = xCordS;
+      framesStopped++;
+    } else {
+      image = imagesAni[1];
+      dy = -dy;
+      yCordS += dy;
+      xCordS += image.dx;
+    }
+  } else {
+    yCordS += dy;
+    xCordS += image.dx;
+  }
+  if (xCordS > canvas.width) {
+    xCordS = randomNum(-200, -100);
+  }
+  if (image === imagesAni[2]) {
+    context.drawImage(image, xCordS + 20, yCordS, 75, 100);
+  } else {
+    context.drawImage(image, xCordS, yCordS, 150, 100);
+  }
+
+  if (
+    player.x + player.radius > xCordS &&
+    player.x - player.radius < xCordS + 100 &&
+    player.y + player.radius > yCordS &&
+    player.y - player.radius < yCordS + 100
+  ) {
+    endGame();
   }
 }
 
@@ -241,43 +302,43 @@ function moveBirds() {
   }
 }
 
-let aniFrame = 0;
-let xCord = canvas.width - 150;
-let yCord = canvas.height * 0.7;
-let lastTime = 0;
+let aniFrameP = 0;
+let xCordP = canvas.width - 150;
+let yCordP = canvas.height * 0.7;
+let lastTimeP = 0;
 function movePeople() {
   let timeDif = new Date() - startTime;
-  let image = imagesSub2[aniFrame];
+  let image = imagesAni[aniFrameP];
   if (
-    player.x + player.radius > xCord &&
-    player.x - player.radius < xCord + 100 &&
-    player.y + player.radius > yCord &&
-    player.y - player.radius < yCord + 100
+    player.x + player.radius > xCordP &&
+    player.x - player.radius < xCordP + 100 &&
+    player.y + player.radius > yCordP &&
+    player.y - player.radius < yCordP + 100
   ) {
     endGame();
   }
-  if (yCord < canvas.height * 0.65 || yCord > canvas.height - 125) {
+  if (yCordP < canvas.height * 0.65 || yCordP > canvas.height - 125) {
     image.dy = -image.dy;
   }
-  console.log(xCord);
-  if (xCord < randomNum(-500, -1500)) {
-    xCord = canvas.width - 150;
+  console.log(xCordP);
+  if (xCordP < randomNum(-500, -1500)) {
+    xCordP = canvas.width - 150;
   }
-  if (timeDif - lastTime > 700) {
-    aniFrame++;
-    lastTime = timeDif;
+  if (timeDif - lastTimeP > 700) {
+    aniFrameP++;
+    lastTimeP = timeDif;
   }
 
-  if (aniFrame < imagesSub2.length) {
-    yCord += image.dy;
-    xCord += image.dx;
-    context.drawImage(image, xCord, yCord, 60, 100);
-  } else if (aniFrame >= imagesSub2.length) {
-    aniFrame = 0;
-    image = imagesSub2[aniFrame];
-    yCord += image.dy;
-    xCord += image.dx;
-    context.drawImage(image, xCord, yCord, 60, 100);
+  if (aniFrameP < imagesAni.length) {
+    yCordP += image.dy;
+    xCordP += image.dx;
+    context.drawImage(image, xCordP, yCordP, 60, 100);
+  } else if (aniFrameP >= imagesAni.length) {
+    aniFrameP = 0;
+    image = imagesAni[aniFrameP];
+    yCordP += image.dy;
+    xCordP += image.dx;
+    context.drawImage(image, xCordP, yCordP, 60, 100);
   }
 }
 
@@ -294,6 +355,7 @@ function animateForest() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   player.draw();
   moveButterflies();
+  moveSqur();
 }
 
 function animateCity() {
@@ -315,7 +377,19 @@ setTimeout(function () {
   if (images.length !== 0) {
     images = [];
   }
-  init(forestSources, 10, 0, canvas.width - 100, 0, 200, 3, 5, 3, 5);
+  init(
+    forestSources,
+    10,
+    0,
+    canvas.width - 100,
+    canvas.height * 0.15,
+    canvas.height * 0.3,
+    3,
+    5,
+    3,
+    5
+  );
+  initAnimate(forestSourcesSqur, 25, canvas.height - 100, 2, 4, 0, 0);
   animateForest();
 }, randomNum(5000, 10000));
 
