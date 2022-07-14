@@ -51,8 +51,10 @@ let citySources = [
   "images/city/car3.png",
 ];
 let citySourcesBirds = ["images/city/pigeon1.png"];
+let citySourcesGirl = ["images/city/girl1.png", "images/city/girl2.png"];
 let images = [];
 let imagesSub = [];
+let imagesSub2 = [];
 
 canvas.addEventListener("mousemove", (event) => {
   player.x = event.offsetX;
@@ -122,6 +124,21 @@ function init2(
       };
       imagesSub.push(image);
     }
+  }
+}
+
+function initAnimate(sources, xCord, yCord, dxMin, dxMax, dyMin, dyMax) {
+  for (let i = 0; i < sources.length; i++) {
+    let image = new Image();
+    image.xCord = xCord;
+    image.yCord = yCord;
+    image.dx = randomNum(dxMin, dxMax);
+    image.dy = randomNum(dyMin, dyMax);
+    image.src = sources[i];
+    image.onload = () => {
+      context.drawImage(image, image.xCord, image.yCord);
+    };
+    imagesSub2.push(image);
   }
 }
 
@@ -228,6 +245,46 @@ function moveBirds() {
   }
 }
 
+let aniFrame = 0;
+let xCord = canvas.width - 150;
+let yCord = canvas.height * 0.7;
+let lastTime = 0;
+function movePeople() {
+  let timeDif = new Date() - startTime;
+  let image = imagesSub2[aniFrame];
+  if (
+    player.x + player.radius > xCord &&
+    player.x - player.radius < xCord + 100 &&
+    player.y + player.radius > yCord &&
+    player.y - player.radius < yCord + 100
+  ) {
+    endGame();
+  }
+  if (yCord < canvas.height * 0.65 || yCord > canvas.height - 125) {
+    image.dy = -image.dy;
+  }
+  console.log(xCord);
+  if (xCord < randomNum(-500, -1500)) {
+    xCord = canvas.width - 150;
+  }
+  if (timeDif - lastTime > 700) {
+    aniFrame++;
+    lastTime = timeDif;
+  }
+
+  if (aniFrame < imagesSub2.length) {
+    yCord += image.dy;
+    xCord += image.dx;
+    context.drawImage(image, xCord, yCord, 60, 100);
+  } else if (aniFrame >= imagesSub2.length) {
+    aniFrame = 0;
+    image = imagesSub2[aniFrame];
+    yCord += image.dy;
+    xCord += image.dx;
+    context.drawImage(image, xCord, yCord, 60, 100);
+  }
+}
+
 let animationID = undefined;
 function animateIce() {
   animationID = requestAnimationFrame(animateIce);
@@ -247,8 +304,9 @@ function animateCity() {
   animationID = requestAnimationFrame(animateCity);
   context.clearRect(0, 0, canvas.width, canvas.height);
   player.draw();
-  moveCars();
-  moveBirds();
+  // moveCars();
+  // moveBirds();
+  movePeople();
 }
 
 // init(iceSources, 9, 0, canvas.width - 100, 0, 200, 0, 0, 3, 5);
@@ -272,18 +330,18 @@ function animateCity() {
 //   while (images.length > 0) {
 //     images.pop();
 //   }
-//   init(
-//     citySources,
-//     3,
-//     canvas.width - 100,
-//     canvas.width - 100,
-//     300,
-//     canvas.height - 100,
-//     3,
-//     5,
-//     0,
-//     0
-//   );
+// init(
+//   citySources,
+//   3,
+//   canvas.width - 100,
+//   canvas.width - 100,
+//   300,
+//   canvas.height - 100,
+//   3,
+//   5,
+//   0,
+//   0
+// );
 //   animateCity();
 // }, randomNum(15000, 20000));
 init(
@@ -299,18 +357,22 @@ init(
   0
 );
 init2(citySourcesBirds, 4, 0, canvas.width - 100, 50, 150, -3, -10, 1, 1);
+initAnimate(
+  citySourcesGirl,
+  canvas.width - 150,
+  canvas.height * 0.7,
+  -2,
+  -4,
+  0.5,
+  0.5
+);
 
 animateCity();
 //Notes for self
 
 // context.beginPath();
 // context.moveTo(0, 0);
-// context.lineTo(100, canvas.height * 0.68);
+// context.lineTo(canvas.width - 150, canvas.height * 0.68);
 // context.stroke();
-
-// function randomMovement(move) {
-//   let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-//   return move * plusOrMinus;
-// }
 
 //Modularize image generation
