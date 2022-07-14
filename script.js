@@ -10,6 +10,7 @@ let context = canvas.getContext("2d");
 let body = document.querySelector("body");
 let time = document.documentElement.querySelector(".time");
 let gameOver = document.querySelector(".gameOver");
+let restartBtn = document.querySelector(".restart");
 
 function randomNum(min, max) {
   min = Math.ceil(min);
@@ -60,6 +61,7 @@ let citySourcesGirl = ["images/city/girl1.png", "images/city/girl2.png"];
 let images = [];
 let imagesSub = [];
 let imagesAni = [];
+let timeoutIDs = [];
 
 canvas.addEventListener("mousemove", (event) => {
   player.x = event.offsetX;
@@ -145,12 +147,6 @@ function initAnimate(sources, xCord, yCord, dxMin, dxMax, dyMin, dyMax) {
     };
     imagesAni.push(image);
   }
-}
-
-function endGame() {
-  cancelAnimationFrame(animationID);
-  gameOver.style.display = "flex";
-  time.textContent = `Time: ${(new Date() - startTime) / 1000} seconds`;
 }
 
 function clearImages() {
@@ -316,7 +312,6 @@ function movePeople() {
   if (yCordP < canvas.height * 0.65 || yCordP > canvas.height - 125) {
     image.dy = -image.dy;
   }
-  console.log(xCordP);
   if (xCordP < randomNum(-500, -1500)) {
     xCordP = canvas.width - 150;
   }
@@ -363,61 +358,99 @@ function animateCity() {
   movePeople();
 }
 
-init(iceSources, 12, 0, canvas.width - 100, 0, 200, 0, 0, 3, 5);
-animateIce();
+let round2 = function () {
+  return setTimeout(function () {
+    cancelAnimationFrame(animationID);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    body.style.backgroundImage = "url('images/forest/forest.jpg')";
+    clearImages();
+    if (imagesAni)
+      init(
+        forestSources,
+        10,
+        0,
+        canvas.width - 100,
+        canvas.height * 0.15,
+        canvas.height * 0.3,
+        3,
+        5,
+        3,
+        5
+      );
+    initAnimate(forestSourcesSqur, 25, canvas.height - 100, 2, 4, 0, 0);
+    animateForest();
+  }, randomNum(5000, 10000));
+};
 
-setTimeout(function () {
-  cancelAnimationFrame(animationID);
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  body.style.backgroundImage = "url('images/forest/forest.jpg')";
-  clearImages();
-  if (imagesAni)
+let round3 = function () {
+  return setTimeout(function () {
+    cancelAnimationFrame(animationID);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    body.style.backgroundImage = "url('images/city/streets.jpg')";
+    clearImages();
     init(
-      forestSources,
-      10,
+      citySources,
+      3,
+      canvas.width - 150,
+      canvas.width - 200,
+      canvas.height * 0.6,
+      canvas.height * 0.65,
+      3,
+      7,
       0,
-      canvas.width - 100,
-      canvas.height * 0.15,
-      canvas.height * 0.3,
-      3,
-      5,
-      3,
-      5
+      0
     );
-  initAnimate(forestSourcesSqur, 25, canvas.height - 100, 2, 4, 0, 0);
-  animateForest();
-}, randomNum(5000, 10000));
+    init2(citySourcesBirds, 4, 0, canvas.width - 100, 50, 150, -3, -10, 1, 1);
+    initAnimate(
+      citySourcesGirl,
+      canvas.width - 150,
+      canvas.height * 0.7,
+      -2,
+      -4,
+      0.5,
+      0.5
+    );
+    animateCity();
+  }, randomNum(15000, 20000));
+};
 
-setTimeout(function () {
+function startGame() {
+  body.style.backgroundImage = "url('images/icecave/icecave.jpg')";
+  init(iceSources, 12, 0, canvas.width - 100, 0, 200, 0, 0, 3, 5);
+  animateIce();
+}
+
+restartBtn.addEventListener("click", () => {
+  restart();
+});
+
+function endGame() {
   cancelAnimationFrame(animationID);
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  body.style.backgroundImage = "url('images/city/streets.jpg')";
-  clearImages();
-  init(
-    citySources,
-    3,
-    canvas.width - 150,
-    canvas.width - 200,
-    canvas.height * 0.6,
-    canvas.height * 0.65,
-    3,
-    7,
-    0,
-    0
-  );
-  init2(citySourcesBirds, 4, 0, canvas.width - 100, 50, 150, -3, -10, 1, 1);
-  initAnimate(
-    citySourcesGirl,
-    canvas.width - 150,
-    canvas.height * 0.7,
-    -2,
-    -4,
-    0.5,
-    0.5
-  );
-  animateCity();
-}, randomNum(15000, 20000));
+  for (ID of timeoutIDs) {
+    clearTimeout(ID);
+  }
+  timeoutIDs = [];
+  gameOver.classList.add("active");
+  canvas.classList.add("inactive");
+  time.textContent = `Time: ${(new Date() - startTime) / 1000} seconds`;
+}
 
+function restart() {
+  images = [];
+  imagesSub = [];
+  imagesAni = [];
+  gameOver.classList.remove("active");
+  canvas.classList.remove("inactive");
+  time.textContent = `Time:`;
+  startTime = new Date();
+  startGame();
+  timeoutIDs.push(round2());
+  timeoutIDs.push(round3());
+}
+
+startGame();
+timeoutIDs.push(round2());
+timeoutIDs.push(round3());
 //Notes for self
 
 // context.beginPath();

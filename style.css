@@ -32,16 +32,61 @@ body {
 canvas {
   grid-area: 3/2/4/3;
   border: 2px solid black;
+  border-radius: 10px;
+  transition: 200ms;
+}
+
+canvas.inactive {
+  transform: scale(0);
 }
 
 .gameOver {
-  width: 100px;
-  height: 100px;
+  width: 30vw;
+  height: 20vh;
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -40%) scale(0);
+  transition: 200ms;
   border: 2px solid black;
   border-radius: 10px;
   display: none;
+  background-image: url("images/Outer_space_cats_rainbows_nyan_cat_1920x1200.jpg");
+  background-size: cover;
+  background-position: 25% 85%;
+  color: white;
+  padding: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.restart {
+  border-radius: 20px;
+  background-color: white;
+  color: #013466;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.1em 1em;
+}
+
+.restart:hover {
+  animation: wiggle;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-10deg);
+  }
+}
+
+.gameOver.active {
+  transform: translate(-50%, -40%) scale(1);
 }
