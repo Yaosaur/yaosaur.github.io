@@ -1,16 +1,18 @@
 let startTime = undefined;
-document.addEventListener("DOMContentLoaded", function () {
-  startTime = new Date();
-});
 
 let canvas = document.querySelector("canvas");
 canvas.width = innerWidth - 200;
 canvas.height = innerHeight - 300;
 let context = canvas.getContext("2d");
 let body = document.querySelector("body");
+let startBtn = document.querySelector(".startBtn");
+let happy = document.querySelector(".happy");
+let instructBtn = document.querySelector(".instructBtn");
+let instruct = document.querySelector(".instruct");
 let time = document.documentElement.querySelector(".time");
 let gameOver = document.querySelector(".gameOver");
 let restartBtn = document.querySelector(".restart");
+let display = document.querySelector(".display");
 
 function randomNum(min, max) {
   min = Math.ceil(min);
@@ -414,8 +416,28 @@ let round3 = function () {
   }, randomNum(15000, 20000));
 };
 
+instructBtn.addEventListener("click", () => {
+  instructBtn.style.transform = "scale(0)";
+  startBtn.style.transform = "scale(0)";
+  instruct.style.transform = "translate(-50%, -40%) scale(1)";
+});
+
+startBtn.addEventListener("click", () => {
+  instructBtn.style.transform = "scale(0)";
+  startBtn.style.transform = "scale(0)";
+  startGame();
+});
+
+happy.addEventListener("click", () => {
+  instruct.style.transform = "translate(-50%, -40%) scale(0)";
+  startGame();
+});
+
 function startGame() {
   body.style.backgroundImage = "url('images/icecave/icecave.jpg')";
+  canvas.classList.remove("inactive");
+  display.classList.add("active");
+  startTime = new Date();
   init(iceSources, 12, 0, canvas.width - 100, 0, 200, 0, 0, 3, 5);
   animateIce();
 }
@@ -442,15 +464,14 @@ function restart() {
   gameOver.classList.remove("active");
   canvas.classList.remove("inactive");
   time.textContent = `Time:`;
-  startTime = new Date();
   startGame();
   timeoutIDs.push(round2());
   timeoutIDs.push(round3());
 }
 
-startGame();
-timeoutIDs.push(round2());
-timeoutIDs.push(round3());
+// startGame();
+// timeoutIDs.push(round2());
+// timeoutIDs.push(round3());
 //Notes for self
 
 // context.beginPath();
@@ -459,3 +480,4 @@ timeoutIDs.push(round3());
 // context.stroke();
 
 //Modularize image generation
+//Universalize code for popups
