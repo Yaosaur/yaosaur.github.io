@@ -10,6 +10,8 @@ body {
   background-repeat: no-repeat;
   font-family: "Fredoka One", cursive;
   cursor: default;
+  color: white;
+  overflow: hidden;
 }
 
 .title {
@@ -52,7 +54,7 @@ canvas.inactive {
 .instruct,
 .gameOver {
   width: 30vw;
-  height: 20vh;
+  height: 25vh;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -68,6 +70,7 @@ canvas.inactive {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
 }
 
 .gameOver {
@@ -132,4 +135,10 @@ canvas.inactive {
 
 .gameOver.active {
   transform: translate(-50%, -40%) scale(1);
+}
+
+.audio {
+  position: fixed;
+  bottom: 1%;
+  right: 1%;
 }

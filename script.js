@@ -13,6 +13,7 @@ let time = document.documentElement.querySelector(".time");
 let gameOver = document.querySelector(".gameOver");
 let restartBtn = document.querySelector(".restart");
 let display = document.querySelector(".display");
+let audio = document.querySelector("audio");
 
 function randomNum(min, max) {
   min = Math.ceil(min);
@@ -415,6 +416,16 @@ let round3 = function () {
     animateCity();
   }, randomNum(15000, 20000));
 };
+
+addEventListener("keydown", (e) => {
+  if (e.key === "z") {
+    if (audio.paused) {
+      audio.play();
+    } else if (!audio.paused) {
+      audio.pause();
+    }
+  }
+});
 
 instructBtn.addEventListener("click", () => {
   instructBtn.style.transform = "scale(0)";
