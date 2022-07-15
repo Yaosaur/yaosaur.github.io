@@ -5,6 +5,7 @@ canvas.width = innerWidth - 200;
 canvas.height = innerHeight - 300;
 let context = canvas.getContext("2d");
 let body = document.querySelector("body");
+let title = document.querySelector(".title");
 let startBtn = document.querySelector(".startBtn");
 let happy = document.querySelector(".happy");
 let instructBtn = document.querySelector(".instructBtn");
@@ -12,6 +13,7 @@ let instruct = document.querySelector(".instruct");
 let time = document.documentElement.querySelector(".time");
 let gameOver = document.querySelector(".gameOver");
 let restartBtn = document.querySelector(".restart");
+let winGame = document.querySelector(".winGame");
 let display = document.querySelector(".display");
 let audio = document.querySelector("audio");
 
@@ -38,7 +40,7 @@ class Circle {
   }
 }
 
-let player = new Circle(canvas.width / 2, canvas.height / 2, 25);
+let player = new Circle(canvas.width / 2, canvas.height / 2, 15);
 let iceSources = [
   "images/icecave/icicles/icy1.png",
   "images/icecave/icicles/icy2.png",
@@ -417,6 +419,16 @@ let round3 = function () {
   }, randomNum(15000, 20000));
 };
 
+let winGameTimeOut = function () {
+  return setTimeout(function () {
+    cancelAnimationFrame(animationID);
+    body.style.backgroundImage = "url('images/stars-train.gif')";
+    canvas.classList.add("inactive");
+    winGame.style.transform = "translate(-50%, -40%) scale(1)";
+    time.textContent = `Time: ${(new Date() - startTime) / 1000} seconds`;
+  }, randomNum(30000, 35000));
+};
+
 addEventListener("keydown", (e) => {
   if (e.key === "z") {
     if (audio.paused) {
@@ -428,12 +440,14 @@ addEventListener("keydown", (e) => {
 });
 
 instructBtn.addEventListener("click", () => {
+  title.style.top = "5%";
   instructBtn.style.transform = "scale(0)";
   startBtn.style.transform = "scale(0)";
   instruct.style.transform = "translate(-50%, -40%) scale(1)";
 });
 
 startBtn.addEventListener("click", () => {
+  title.style.top = "5%";
   instructBtn.style.transform = "scale(0)";
   startBtn.style.transform = "scale(0)";
   startGame();
@@ -451,6 +465,9 @@ function startGame() {
   startTime = new Date();
   init(iceSources, 12, 0, canvas.width - 100, 0, 200, 0, 0, 3, 5);
   animateIce();
+  timeoutIDs.push(round2());
+  timeoutIDs.push(round3());
+  timeoutIDs.push(winGameTimeOut());
 }
 
 restartBtn.addEventListener("click", () => {
@@ -478,6 +495,7 @@ function restart() {
   startGame();
   timeoutIDs.push(round2());
   timeoutIDs.push(round3());
+  timeoutIDs.push(winGameTimeOut());
 }
 
 // startGame();
