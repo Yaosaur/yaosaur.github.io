@@ -23,22 +23,27 @@ body {
   align-items: center;
   font-size: 10vh;
   transition: all 100ms;
+  animation: wiggle 2s infinite linear alternate;
 }
 
-.display {
-  grid-area: 2/2/3/3;
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
+.shrinkIcon img,
+.time {
+  position: fixed;
   transform: scale(0);
   transition: all 200ms;
 }
 
-.display.active {
-  transform: scale(1);
+.shrinkIcon img {
+  top: 23%;
+  left: 25%;
+  width: 1.5vw;
+  height: 2.5vh;
+  opacity: 1;
 }
 
 .time {
+  top: 23%;
+  right: 25%;
   font-size: 2vh;
 }
 
@@ -123,18 +128,17 @@ canvas.inactive {
 .instructBtn:hover,
 .restart:hover {
   opacity: 1;
-  /* animation: wiggle 1.5s linear infinite alternate-reverse; */
 }
 
 @keyframes wiggle {
   0% {
-    transform: rotate(5deg);
+    transform: rotate(-5deg);
   }
   50% {
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(-5deg);
+    transform: rotate(5deg);
   }
 }
 

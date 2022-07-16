@@ -5,6 +5,7 @@ canvas.width = innerWidth - 200;
 canvas.height = innerHeight - 300;
 let context = canvas.getContext("2d");
 let body = document.querySelector("body");
+let shrinkIcon = document.querySelector(".shrinkIcon img");
 let title = document.querySelector(".title");
 let startBtn = document.querySelector(".startBtn");
 let happy = document.querySelector(".happy");
@@ -14,7 +15,6 @@ let time = document.documentElement.querySelector(".time");
 let gameOver = document.querySelector(".gameOver");
 let restartBtn = document.querySelector(".restart");
 let winGame = document.querySelector(".winGame");
-let display = document.querySelector(".display");
 let audio = document.querySelector("audio");
 
 function randomNum(min, max) {
@@ -28,6 +28,7 @@ class Circle {
     this.x = x;
     this.y = y;
     this.radius = radius;
+    this.shrinkPow = 0;
   }
 
   draw() {
@@ -38,9 +39,18 @@ class Circle {
     context.fillStyle = "yellow";
     context.fill();
   }
+
+  shrink(shrinkRadius) {
+    this.radius = shrinkRadius;
+    this.shrinkPow--;
+    shrinkIcon.style.opacity = "0.5";
+    setTimeout(() => {
+      this.radius = 25;
+    }, 3000);
+  }
 }
 
-let player = new Circle(canvas.width / 2, canvas.height / 2, 15);
+let player = new Circle(canvas.width / 2, canvas.height / 2, 25);
 let iceSources = [
   "images/icecave/icicles/icy1.png",
   "images/icecave/icicles/icy2.png",
@@ -363,8 +373,37 @@ function animateCity() {
   movePeople();
 }
 
+function startGame() {
+  body.style.backgroundImage = "url('images/icecave/icecave.jpg')";
+  canvas.classList.remove("inactive");
+  time.style.transform = "scale(1)";
+  shrinkIcon.style.transform = "scale(1)";
+  title.style.animation = "none";
+  startTime = new Date();
+  player.shrinkPow = 1;
+  shrinkIcon.style.opacity = "1";
+  init(
+    iceSources,
+    12,
+    0,
+    canvas.width - 100,
+    -canvas.height * 0.1,
+    canvas.height * 0.1,
+    0,
+    0,
+    3,
+    5
+  );
+  animateIce();
+  timeoutIDs.push(round2());
+  timeoutIDs.push(round3());
+  timeoutIDs.push(winGameTimeOut());
+}
+
 let round2 = function () {
   return setTimeout(function () {
+    player.shrinkPow = 1;
+    shrinkIcon.style.opacity = "1";
     cancelAnimationFrame(animationID);
     context.clearRect(0, 0, canvas.width, canvas.height);
     body.style.backgroundImage = "url('images/forest/forest.jpg')";
@@ -389,6 +428,8 @@ let round2 = function () {
 
 let round3 = function () {
   return setTimeout(function () {
+    player.shrinkPow = 1;
+    shrinkIcon.style.opacity = "1";
     cancelAnimationFrame(animationID);
     context.clearRect(0, 0, canvas.width, canvas.height);
     body.style.backgroundImage = "url('images/city/streets.jpg')";
@@ -425,6 +466,7 @@ let winGameTimeOut = function () {
     body.style.backgroundImage = "url('images/stars-train.gif')";
     canvas.classList.add("inactive");
     winGame.style.transform = "translate(-50%, -40%) scale(1)";
+    title.style.animation = "wiggle 2s infinite linear alternate";
     time.textContent = `Time: ${(new Date() - startTime) / 1000} seconds`;
   }, randomNum(30000, 35000));
 };
@@ -437,10 +479,14 @@ addEventListener("keydown", (e) => {
       audio.pause();
     }
   }
+  if (e.key === "s" && player.shrinkPow > 0) {
+    player.shrink(10);
+  }
 });
 
 instructBtn.addEventListener("click", () => {
   title.style.top = "5%";
+  title.style.animation = "none";
   instructBtn.style.transform = "scale(0)";
   startBtn.style.transform = "scale(0)";
   instruct.style.transform = "translate(-50%, -40%) scale(1)";
@@ -457,18 +503,6 @@ happy.addEventListener("click", () => {
   instruct.style.transform = "translate(-50%, -40%) scale(0)";
   startGame();
 });
-
-function startGame() {
-  body.style.backgroundImage = "url('images/icecave/icecave.jpg')";
-  canvas.classList.remove("inactive");
-  display.classList.add("active");
-  startTime = new Date();
-  init(iceSources, 12, 0, canvas.width - 100, 0, 200, 0, 0, 3, 5);
-  animateIce();
-  timeoutIDs.push(round2());
-  timeoutIDs.push(round3());
-  timeoutIDs.push(winGameTimeOut());
-}
 
 restartBtn.addEventListener("click", () => {
   restart();
