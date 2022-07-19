@@ -4,7 +4,7 @@ A Happy Dot is a single player game about getting a lost emoji back home. The pl
 
 ## Demo of the First Stage
 
-![Demo of A Happy Dot](/images/Demo.gif)
+![Demo of A Happy Dot](/A%20Happy%20Dot/images/Demo.gif)
 
 ## Features
 
@@ -34,13 +34,13 @@ Additional features for the future:
 
 ## Where To Play
 
-The game can be played at
+The game can be played by clicking [here](https://yaosaur.github.io/a_happy_dot)
 
 ## Contribution Guidelines
 
 Currently not accepting any new feature suggestions for this game.
 
-If you notice a bug while playing, please report it to
+If you notice a bug while playing, please report it [here](https://github.com/Yaosaur/yaosaur.github.io/issues)
 
 ## Credits
 
