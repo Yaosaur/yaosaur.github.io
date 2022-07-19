@@ -46,7 +46,7 @@ class Circle {
     shrinkIcon.style.opacity = "0.5";
     setTimeout(() => {
       this.radius = canvas.width * 0.02;
-    }, 3000);
+    }, 1000);
   }
 }
 
@@ -63,13 +63,13 @@ let iceSources = [
   "images/icecave/icicles/icy5.png",
   "images/icecave/icicles/icy6.png",
 ];
-let forestSources = ["images/forest/butterflyswarm.png"];
+let forestSourcesSwarm = ["images/forest/butterflyswarm.png"];
 let forestSourcesSqur = [
   "images/forest/sq1.png",
   "images/forest/sq2.png",
   "images/forest/sq3.png",
 ];
-let citySources = [
+let citySourcesCars = [
   "images/city/car1.png",
   "images/city/car2.png",
   "images/city/car3.png",
@@ -88,6 +88,7 @@ canvas.addEventListener("mousemove", (event) => {
 });
 
 function init(
+  array,
   sources,
   desiredParticles,
   spawnWidthMin,
@@ -99,7 +100,7 @@ function init(
   dyMin,
   dyMax
 ) {
-  while (images.length < desiredParticles) {
+  while (array.length < desiredParticles) {
     for (let i = 0; i < desiredParticles; i++) {
       let ranArrayIndex = randomNum(0, sources.length - 1);
       let image = new Image();
@@ -111,44 +112,7 @@ function init(
       image.onload = () => {
         context.drawImage(image, image.xCord, image.yCord);
       };
-      images.push(image);
-    }
-  }
-}
-
-function init2(
-  sources,
-  desiredParticles,
-  spawnWidthMin,
-  spawnWidthMax,
-  spawnHeightMin,
-  spawnHeightMax,
-  dxMin,
-  dxMax,
-  dyMin,
-  dyMax,
-  imageWidth,
-  imageHeight
-) {
-  while (imagesSub.length < desiredParticles) {
-    for (let i = 0; i < desiredParticles; i++) {
-      let ranArrayIndex = randomNum(0, sources.length - 1);
-      let image = new Image();
-      image.xCord = randomNum(spawnWidthMin, spawnWidthMax);
-      image.yCord = randomNum(spawnHeightMin, spawnHeightMax);
-      image.dx = randomNum(dxMin, dxMax);
-      image.dy = randomNum(dyMin, dyMax);
-      image.src = sources[ranArrayIndex];
-      image.onload = () => {
-        context.drawImage(
-          image,
-          image.xCord,
-          image.yCord,
-          imageWidth,
-          imageHeight
-        );
-      };
-      imagesSub.push(image);
+      array.push(image);
     }
   }
 }
@@ -184,6 +148,7 @@ function moveIcicles() {
     ) {
       image.xCord = randomNum(0, canvas.width * 0.95);
       image.yCord = randomNum(-canvas.height * 0.2, 0);
+      image.dy = randomNum(canvas.height * 0.005, canvas.height * 0.015);
     }
     context.drawImage(
       image,
@@ -208,17 +173,19 @@ function moveButterflies() {
     image.xCord += image.dx;
     image.yCord += image.dy;
     if (
-      image.xCord + canvas.width * 0.08 >
-        randomNum(canvas.width * 1.1, canvas.width * 1.3) ||
-      image.xCord < randomNum(-canvas.width * 0.1, -canvas.width * 0.3)
+      image.xCord + canvas.width * 0.08 > canvas.width * 1.1 ||
+      image.xCord < -canvas.width * 0.1
     ) {
       image.dx = -image.dx;
-    } else if (
-      image.yCord < -canvas.height * 0.1 ||
-      image.yCord > canvas.height * 0.4
+    }
+
+    if (
+      image.yCord < -canvas.height * 0.2 ||
+      image.yCord + canvas.height * 0.24 > canvas.height * 0.75
     ) {
       image.dy = -image.dy;
     }
+
     if (
       player.x + player.radius > image.xCord &&
       player.x - player.radius < image.xCord + canvas.width * 0.08 &&
@@ -275,7 +242,7 @@ function moveSqur() {
   if (image === imagesAni[2]) {
     context.drawImage(
       image,
-      xCordS + 20,
+      xCordS + canvas.width * 0.01,
       yCordS,
       canvas.width * 0.06,
       canvas.height * 0.18
@@ -324,8 +291,8 @@ function moveCars() {
     if (image.xCord < 0) {
       image.dx = randomNum(canvas.width * 0.005, canvas.width * 0.007);
       image.xCord = randomNum(canvas.width * 1.1, canvas.width * 1.2);
-      let ranArrayIndex = randomNum(0, citySources.length - 1);
-      image.src = citySources[ranArrayIndex];
+      let ranArrayIndex = randomNum(0, citySourcesCars.length - 1);
+      image.src = citySourcesCars[ranArrayIndex];
     } else {
       context.drawImage(
         image,
@@ -429,11 +396,11 @@ function animateIce() {
   moveIcicles();
 }
 
-function animateForest() {
+function animateForest(speed) {
   animationID = requestAnimationFrame(animateForest);
   context.clearRect(0, 0, canvas.width, canvas.height);
   player.draw();
-  moveButterflies();
+  moveButterflies(speed);
   moveSqur();
 }
 
@@ -447,8 +414,8 @@ function animateCity() {
 }
 
 function startGame() {
-  body.style.backgroundImage = "url('images/icecave/icecave.jpg')";
-  canvas.classList.remove("inactive");
+  body.style.backgroundImage = "url('images/forest/forest.jpg')";
+  canvas.style.transform = "scale(1)";
   time.style.transform = "scale(1)";
   shrinkIcon.style.transform = "scale(1)";
   title.style.animation = "none";
@@ -456,18 +423,28 @@ function startGame() {
   player.shrinkPow = 1;
   shrinkIcon.style.opacity = "1";
   init(
-    iceSources,
+    images,
+    forestSourcesSwarm,
     10,
     0,
     canvas.width * 0.9,
-    -canvas.height * 0.1,
+    canvas.height * 0,
     canvas.height * 0.1,
-    0,
-    0,
+    canvas.width * 0.003,
+    canvas.width * 0.006,
     canvas.height * 0.005,
-    canvas.height * 0.02
+    canvas.height * 0.008
   );
-  animateIce();
+  initAnimate(
+    forestSourcesSqur,
+    canvas.width * 0.05,
+    canvas.height * 0.8,
+    canvas.width * 0.003,
+    canvas.width * 0.006,
+    0,
+    0
+  );
+  animateForest();
   timeoutIDs.push(round2());
   timeoutIDs.push(round3());
   timeoutIDs.push(winGameTimeOut());
@@ -479,43 +456,11 @@ let round2 = function () {
     shrinkIcon.style.opacity = "1";
     cancelAnimationFrame(animationID);
     context.clearRect(0, 0, canvas.width, canvas.height);
-    body.style.backgroundImage = "url('images/forest/forest.jpg')";
-    clearImages();
-    init(
-      forestSources,
-      10,
-      0,
-      canvas.width * 0.9,
-      canvas.height * 0.15,
-      canvas.height * 0.3,
-      canvas.width * 0.003,
-      canvas.width * 0.005,
-      canvas.height * 0.004,
-      canvas.height * 0.008
-    );
-    initAnimate(
-      forestSourcesSqur,
-      canvas.width * 0.05,
-      canvas.height * 0.8,
-      canvas.width * 0.003,
-      canvas.width * 0.006,
-      0,
-      0
-    );
-    animateForest();
-  }, randomNum(5000, 10000));
-};
-
-let round3 = function () {
-  return setTimeout(function () {
-    player.shrinkPow = 1;
-    shrinkIcon.style.opacity = "1";
-    cancelAnimationFrame(animationID);
-    context.clearRect(0, 0, canvas.width, canvas.height);
     body.style.backgroundImage = "url('images/city/streets.jpg')";
     clearImages();
     init(
-      citySources,
+      images,
+      citySourcesCars,
       3,
       canvas.width * 0.9,
       canvas.width,
@@ -526,7 +471,8 @@ let round3 = function () {
       0,
       0
     );
-    init2(
+    init(
+      imagesSub,
       citySourcesBirds,
       4,
       canvas.width * 0.9,
@@ -548,24 +494,56 @@ let round3 = function () {
       canvas.height * 0.001
     );
     animateCity();
-  }, randomNum(15000, 20000));
+  }, 20000);
+};
+
+let round3 = function () {
+  return setTimeout(function () {
+    player.shrinkPow = 1;
+    shrinkIcon.style.opacity = "1";
+    cancelAnimationFrame(animationID);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    body.style.backgroundImage = "url('images/icecave/icecave.jpg')";
+    clearImages();
+    init(
+      images,
+      iceSources,
+      10,
+      0,
+      canvas.width * 0.9,
+      -canvas.height * 0.1,
+      canvas.height * 0.1,
+      0,
+      0,
+      canvas.height * 0.005,
+      canvas.height * 0.015
+    );
+    animateIce();
+  }, 40000);
 };
 
 let winGameTimeOut = function () {
   return setTimeout(function () {
     cancelAnimationFrame(animationID);
     body.style.backgroundImage = "url('images/stars-train.gif')";
-    canvas.classList.add("inactive");
+    canvas.style.transform = "scale(0)";
     winGame.style.transform = "translate(-50%, -40%) scale(1)";
     title.style.animation = "wiggle 2s infinite linear alternate";
     time.textContent = `Time: ${(new Date() - startTime) / 1000} seconds`;
     shrinkIcon.style.transform = "scale(0)";
-  }, randomNum(30000, 35000));
+  }, 60000);
 };
 
 addEventListener("resize", () => {
   canvas.width = innerWidth - 200;
   canvas.height = innerHeight - 300;
+  player.radius = canvas.width * 0.02;
+  //reset moveSqur assets
+  yCordS = canvas.height * 0.82;
+  dy = randomNum(-canvas.height * 0.001, -canvas.height * 0.003);
+  //reset movePeople assets
+  xCordP = canvas.width * 0.9;
+  yCordP = canvas.height * 0.7;
 });
 
 addEventListener("keydown", (e) => {
@@ -607,12 +585,13 @@ restartBtn.addEventListener("click", () => {
 
 function endGame() {
   cancelAnimationFrame(animationID);
+  context.clearRect(0, 0, canvas.width, canvas.height);
   for (ID of timeoutIDs) {
     clearTimeout(ID);
   }
   timeoutIDs = [];
-  gameOver.classList.add("active");
-  canvas.classList.add("inactive");
+  gameOver.style.transform = "translate(-50%, -40%) scale(1)";
+  canvas.style.transform = "scale(0)";
   time.textContent = `Time: ${(new Date() - startTime) / 1000} seconds`;
 }
 
@@ -620,24 +599,18 @@ function restart() {
   images = [];
   imagesSub = [];
   imagesAni = [];
-  gameOver.classList.remove("active");
-  canvas.classList.remove("inactive");
+  gameOver.style.transform = "translate(-50%, -40%) scale(0)";
+  canvas.style.transform = "scale(1)";
+  player.x = canvas.width * 0.5;
+  player.y = canvas.height * 0.65;
   time.textContent = `Time:`;
+  //Have to reset location of animated items since their x and y are not auto reset with each restart
+  xCordS = 0;
+  yCordS = canvas.height * 0.82;
+  xCordP = canvas.width * 0.9;
+  yCordP = canvas.height * 0.7;
   startGame();
   timeoutIDs.push(round2());
   timeoutIDs.push(round3());
   timeoutIDs.push(winGameTimeOut());
 }
-
-// startGame();
-// timeoutIDs.push(round2());
-// timeoutIDs.push(round3());
-//Notes for self
-
-// context.beginPath();
-// context.moveTo(0, 0);
-// context.lineTo(canvas.width - 150, canvas.height * 0.68);
-// context.stroke();
-
-//Modularize image generation
-//Universalize code for popups

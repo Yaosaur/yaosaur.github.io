@@ -9,13 +9,12 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   font-family: "Fredoka One", cursive;
-  cursor: default;
   color: white;
   overflow: hidden;
 }
 
 .title {
-  position: fixed;
+  position: absolute;
   top: 30%;
   left: 35%;
   display: flex;
@@ -34,7 +33,7 @@ body {
 }
 
 .shrinkIcon img {
-  top: 23%;
+  top: 17%;
   left: 25%;
   width: 1.5vw;
   height: 2.5vh;
@@ -42,7 +41,7 @@ body {
 }
 
 .time {
-  top: 23%;
+  top: 17%;
   right: 25%;
   font-size: 2vh;
 }
@@ -52,10 +51,6 @@ canvas {
   border: 2px solid black;
   border-radius: 10px;
   transition: 200ms;
-  transform: scale(1);
-}
-
-canvas.inactive {
   transform: scale(0);
 }
 
@@ -81,6 +76,7 @@ canvas.inactive {
   justify-content: center;
   align-items: center;
   align-content: space-between;
+  column-gap: 10vmin;
 }
 
 .gameOver {
@@ -89,6 +85,10 @@ canvas.inactive {
 
 .instruct {
   font-size: 1.7vh;
+}
+
+.winGame {
+  font-size: 2vh;
 }
 
 .startBtn,
@@ -140,10 +140,6 @@ canvas.inactive {
   100% {
     transform: rotate(5deg);
   }
-}
-
-.gameOver.active {
-  transform: translate(-50%, -40%) scale(1);
 }
 
 .audio {
