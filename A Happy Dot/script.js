@@ -178,14 +178,12 @@ function moveButterflies() {
     ) {
       image.dx = -image.dx;
     }
-
     if (
       image.yCord < -canvas.height * 0.2 ||
       image.yCord + canvas.height * 0.24 > canvas.height * 0.75
     ) {
       image.dy = -image.dy;
     }
-
     if (
       player.x + player.radius > image.xCord &&
       player.x - player.radius < image.xCord + canvas.width * 0.08 &&
