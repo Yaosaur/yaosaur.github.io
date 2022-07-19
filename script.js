@@ -45,12 +45,16 @@ class Circle {
     this.shrinkPow--;
     shrinkIcon.style.opacity = "0.5";
     setTimeout(() => {
-      this.radius = 25;
+      this.radius = canvas.width * 0.02;
     }, 3000);
   }
 }
 
-let player = new Circle(canvas.width / 2, canvas.height / 2, 25);
+let player = new Circle(
+  canvas.width / 2,
+  canvas.height / 2,
+  canvas.width * 0.02
+);
 let iceSources = [
   "images/icecave/icicles/icy1.png",
   "images/icecave/icicles/icy2.png",
@@ -174,16 +178,25 @@ function moveIcicles() {
   for (image of images) {
     image.xCord += image.dx;
     image.yCord += image.dy;
-    if (image.yCord + 100 > canvas.height + randomNum(200, 500)) {
-      image.xCord = randomNum(0, canvas.width - 100);
-      image.yCord = randomNum(-100, 0);
+    if (
+      image.yCord + canvas.height * 0.25 >
+      randomNum(canvas.height * 1.1, canvas.height * 1.3)
+    ) {
+      image.xCord = randomNum(0, canvas.width * 0.95);
+      image.yCord = randomNum(-canvas.height * 0.2, 0);
     }
-    context.drawImage(image, image.xCord, image.yCord, 50, 125);
+    context.drawImage(
+      image,
+      image.xCord,
+      image.yCord,
+      canvas.width * 0.05,
+      canvas.height * 0.25
+    );
     if (
       player.x + player.radius > image.xCord &&
-      player.x - player.radius < image.xCord + 100 &&
+      player.x - player.radius < image.xCord + canvas.width * 0.05 &&
       player.y + player.radius > image.yCord &&
-      player.y - player.radius < image.yCord + 100
+      player.y - player.radius < image.yCord + canvas.height * 0.25
     ) {
       endGame();
     }
@@ -194,31 +207,44 @@ function moveButterflies() {
   for (image of images) {
     image.xCord += image.dx;
     image.yCord += image.dy;
-    if (image.xCord + 100 > canvas.width || image.xCord < 0) {
+    if (
+      image.xCord + canvas.width * 0.08 >
+        randomNum(canvas.width * 1.1, canvas.width * 1.3) ||
+      image.xCord < randomNum(-canvas.width * 0.1, -canvas.width * 0.3)
+    ) {
       image.dx = -image.dx;
-    } else if (image.yCord < 0 || image.yCord + 100 > canvas.height * 0.6) {
+    } else if (
+      image.yCord < -canvas.height * 0.1 ||
+      image.yCord > canvas.height * 0.4
+    ) {
       image.dy = -image.dy;
     }
     if (
       player.x + player.radius > image.xCord &&
-      player.x - player.radius < image.xCord + 100 &&
+      player.x - player.radius < image.xCord + canvas.width * 0.08 &&
       player.y + player.radius > image.yCord &&
-      player.y - player.radius < image.yCord + 100
+      player.y - player.radius < image.yCord + canvas.height * 0.24
     ) {
       endGame();
     }
-    context.drawImage(image, image.xCord, image.yCord, 125, 125);
+    context.drawImage(
+      image,
+      image.xCord,
+      image.yCord,
+      canvas.width * 0.08,
+      canvas.height * 0.24
+    );
   }
 }
 
 let xCordS = 0;
-let yCordS = canvas.height - 100;
-let dy = randomNum(-1, -2);
+let yCordS = canvas.height * 0.82;
+let dy = randomNum(-canvas.height * 0.001, -canvas.height * 0.003);
 let lastTimeS = 0;
 let framesStopped = 0;
 function moveSqur() {
   let image = undefined;
-  if (yCordS < canvas.height - 150) {
+  if (yCordS < canvas.height * 0.7) {
     dy = -dy;
   }
   if (dy > 0) {
@@ -226,13 +252,14 @@ function moveSqur() {
   } else {
     image = imagesAni[0];
   }
-  if (yCordS > canvas.height - 100) {
+  if (yCordS > canvas.height * 0.82) {
     if (framesStopped < 60) {
       image = imagesAni[2];
       yCordS = yCordS;
       xCordS = xCordS;
       framesStopped++;
     } else {
+      framesStopped = 0;
       image = imagesAni[1];
       dy = -dy;
       yCordS += dy;
@@ -243,21 +270,43 @@ function moveSqur() {
     xCordS += image.dx;
   }
   if (xCordS > canvas.width) {
-    xCordS = randomNum(-200, -100);
+    xCordS = randomNum(-canvas.width * 0.2, -canvas.width * 0.1);
   }
   if (image === imagesAni[2]) {
-    context.drawImage(image, xCordS + 20, yCordS, 75, 100);
+    context.drawImage(
+      image,
+      xCordS + 20,
+      yCordS,
+      canvas.width * 0.06,
+      canvas.height * 0.18
+    );
   } else {
-    context.drawImage(image, xCordS, yCordS, 150, 100);
+    context.drawImage(
+      image,
+      xCordS,
+      yCordS,
+      canvas.width * 0.12,
+      canvas.height * 0.15
+    );
   }
-
-  if (
-    player.x + player.radius > xCordS &&
-    player.x - player.radius < xCordS + 100 &&
-    player.y + player.radius > yCordS &&
-    player.y - player.radius < yCordS + 100
-  ) {
-    endGame();
+  if (image === imagesAni[0] || image === imagesAni[1]) {
+    if (
+      player.x + player.radius > xCordS &&
+      player.x - player.radius < xCordS + canvas.width * 0.12 &&
+      player.y + player.radius > yCordS &&
+      player.y - player.radius < yCordS + canvas.height * 0.15
+    ) {
+      endGame();
+    }
+  } else if (image === imagesAni[2]) {
+    if (
+      player.x + player.radius > xCordS &&
+      player.x - player.radius < xCordS + 20 + canvas.width * 0.06 &&
+      player.y + player.radius > yCordS &&
+      player.y - player.radius < yCordS + canvas.height * 0.18
+    ) {
+      endGame();
+    }
   }
 }
 
@@ -266,51 +315,63 @@ function moveCars() {
     image.xCord -= image.dx;
     if (
       player.x + player.radius > image.xCord &&
-      player.x - player.radius < image.xCord + 100 &&
+      player.x - player.radius < image.xCord + canvas.width * 0.1 &&
       player.y + player.radius > image.yCord &&
-      player.y - player.radius < image.yCord + 100
+      player.y - player.radius < image.yCord + canvas.height * 0.1
     ) {
       endGame();
     }
     if (image.xCord < 0) {
-      image.dx = randomNum(3, 7);
-      image.xCord = randomNum(canvas.width - 150, canvas.width - 200);
+      image.dx = randomNum(canvas.width * 0.005, canvas.width * 0.007);
+      image.xCord = randomNum(canvas.width * 1.1, canvas.width * 1.2);
       let ranArrayIndex = randomNum(0, citySources.length - 1);
       image.src = citySources[ranArrayIndex];
     } else {
-      context.drawImage(image, image.xCord, image.yCord, 125, 70);
+      context.drawImage(
+        image,
+        image.xCord,
+        image.yCord,
+        canvas.width * 0.1,
+        canvas.height * 0.1
+      );
     }
   }
 }
 
 function moveBirds() {
   for (image of imagesSub) {
-    let ranTop = randomNum(10, 30);
-    let ranBottom = randomNum(175, 200);
+    let ranTop = randomNum(canvas.height * 0.02, canvas.height * 0.07);
+    let ranBottom = randomNum(canvas.height * 0.4, canvas.height * 0.45);
     image.xCord += image.dx;
     image.yCord += image.dy;
     if (image.yCord < ranTop || image.yCord > ranBottom) {
       image.dy = -image.dy;
     }
     if (image.xCord < 0) {
-      image.dx = randomNum(-3, -10);
-      image.xCord = randomNum(canvas.width - 150, canvas.width - 200);
-      image.yCord = randomNum(50, 150);
+      image.dx = randomNum(-canvas.width * 0.004, -canvas.width * 0.008);
+      image.xCord = randomNum(canvas.width * 1.1, canvas.width * 1.2);
+      image.yCord = randomNum(canvas.height * 0.02, canvas.height * 0.45);
     }
     if (
       player.x + player.radius > image.xCord &&
-      player.x - player.radius < image.xCord + 100 &&
+      player.x - player.radius < image.xCord + canvas.width * 0.03 &&
       player.y + player.radius > image.yCord &&
-      player.y - player.radius < image.yCord + 100
+      player.y - player.radius < image.yCord + canvas.height * 0.07
     ) {
       endGame();
     }
-    context.drawImage(image, image.xCord, image.yCord, 50, 50);
+    context.drawImage(
+      image,
+      image.xCord,
+      image.yCord,
+      canvas.width * 0.03,
+      canvas.height * 0.07
+    );
   }
 }
 
 let aniFrameP = 0;
-let xCordP = canvas.width - 150;
+let xCordP = canvas.width * 0.9;
 let yCordP = canvas.height * 0.7;
 let lastTimeP = 0;
 function movePeople() {
@@ -318,17 +379,17 @@ function movePeople() {
   let image = imagesAni[aniFrameP];
   if (
     player.x + player.radius > xCordP &&
-    player.x - player.radius < xCordP + 100 &&
+    player.x - player.radius < xCordP + canvas.width * 0.05 &&
     player.y + player.radius > yCordP &&
-    player.y - player.radius < yCordP + 100
+    player.y - player.radius < yCordP + canvas.height * 0.2
   ) {
     endGame();
   }
-  if (yCordP < canvas.height * 0.65 || yCordP > canvas.height - 125) {
+  if (yCordP < canvas.height * 0.65 || yCordP > canvas.height * 0.8) {
     image.dy = -image.dy;
   }
-  if (xCordP < randomNum(-500, -1500)) {
-    xCordP = canvas.width - 150;
+  if (xCordP < randomNum(-canvas.width * 0.5, -canvas.width * 1)) {
+    xCordP = canvas.width * 0.9;
   }
   if (timeDif - lastTimeP > 700) {
     aniFrameP++;
@@ -338,13 +399,25 @@ function movePeople() {
   if (aniFrameP < imagesAni.length) {
     yCordP += image.dy;
     xCordP += image.dx;
-    context.drawImage(image, xCordP, yCordP, 60, 100);
+    context.drawImage(
+      image,
+      xCordP,
+      yCordP,
+      canvas.width * 0.05,
+      canvas.height * 0.2
+    );
   } else if (aniFrameP >= imagesAni.length) {
     aniFrameP = 0;
     image = imagesAni[aniFrameP];
     yCordP += image.dy;
     xCordP += image.dx;
-    context.drawImage(image, xCordP, yCordP, 60, 100);
+    context.drawImage(
+      image,
+      xCordP,
+      yCordP,
+      canvas.width * 0.05,
+      canvas.height * 0.2
+    );
   }
 }
 
@@ -384,15 +457,15 @@ function startGame() {
   shrinkIcon.style.opacity = "1";
   init(
     iceSources,
-    12,
+    10,
     0,
-    canvas.width - 100,
+    canvas.width * 0.9,
     -canvas.height * 0.1,
     canvas.height * 0.1,
     0,
     0,
-    3,
-    5
+    canvas.height * 0.005,
+    canvas.height * 0.02
   );
   animateIce();
   timeoutIDs.push(round2());
@@ -408,20 +481,27 @@ let round2 = function () {
     context.clearRect(0, 0, canvas.width, canvas.height);
     body.style.backgroundImage = "url('images/forest/forest.jpg')";
     clearImages();
-    if (imagesAni)
-      init(
-        forestSources,
-        10,
-        0,
-        canvas.width - 100,
-        canvas.height * 0.15,
-        canvas.height * 0.3,
-        3,
-        5,
-        3,
-        5
-      );
-    initAnimate(forestSourcesSqur, 25, canvas.height - 100, 2, 4, 0, 0);
+    init(
+      forestSources,
+      10,
+      0,
+      canvas.width * 0.9,
+      canvas.height * 0.15,
+      canvas.height * 0.3,
+      canvas.width * 0.003,
+      canvas.width * 0.005,
+      canvas.height * 0.004,
+      canvas.height * 0.008
+    );
+    initAnimate(
+      forestSourcesSqur,
+      canvas.width * 0.05,
+      canvas.height * 0.8,
+      canvas.width * 0.003,
+      canvas.width * 0.006,
+      0,
+      0
+    );
     animateForest();
   }, randomNum(5000, 10000));
 };
@@ -437,24 +517,35 @@ let round3 = function () {
     init(
       citySources,
       3,
-      canvas.width - 150,
-      canvas.width - 200,
+      canvas.width * 0.9,
+      canvas.width,
       canvas.height * 0.6,
       canvas.height * 0.65,
-      3,
-      7,
+      canvas.width * 0.005,
+      canvas.width * 0.007,
       0,
       0
     );
-    init2(citySourcesBirds, 4, 0, canvas.width - 100, 50, 150, -3, -10, 1, 1);
+    init2(
+      citySourcesBirds,
+      4,
+      canvas.width * 0.9,
+      canvas.width,
+      canvas.height * 0.1,
+      canvas.height * 0.5,
+      -canvas.width * 0.006,
+      -canvas.width * 0.01,
+      canvas.height * 0.001,
+      canvas.height * 0.003
+    );
     initAnimate(
       citySourcesGirl,
-      canvas.width - 150,
+      canvas.width * 0.9,
       canvas.height * 0.7,
-      -2,
-      -4,
-      0.5,
-      0.5
+      -canvas.width * 0.002,
+      -canvas.width * 0.004,
+      canvas.height * 0.0005,
+      canvas.height * 0.001
     );
     animateCity();
   }, randomNum(15000, 20000));
@@ -468,8 +559,14 @@ let winGameTimeOut = function () {
     winGame.style.transform = "translate(-50%, -40%) scale(1)";
     title.style.animation = "wiggle 2s infinite linear alternate";
     time.textContent = `Time: ${(new Date() - startTime) / 1000} seconds`;
+    shrinkIcon.style.transform = "scale(0)";
   }, randomNum(30000, 35000));
 };
+
+addEventListener("resize", () => {
+  canvas.width = innerWidth - 200;
+  canvas.height = innerHeight - 300;
+});
 
 addEventListener("keydown", (e) => {
   if (e.key === "z") {
@@ -480,7 +577,7 @@ addEventListener("keydown", (e) => {
     }
   }
   if (e.key === "s" && player.shrinkPow > 0) {
-    player.shrink(10);
+    player.shrink(canvas.width * 0.005);
   }
 });
 

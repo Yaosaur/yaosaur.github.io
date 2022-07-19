@@ -21,7 +21,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 10vh;
+  font-size: 10vmin;
   transition: all 100ms;
   animation: wiggle 2s infinite linear alternate;
 }
@@ -103,7 +103,7 @@ canvas.inactive {
   width: 7vw;
   height: 3vh;
   padding: 10px 5px;
-  font-size: 2vh;
+  font-size: 2vmin;
   transform: scale(1);
   transition: all 200ms;
 }
