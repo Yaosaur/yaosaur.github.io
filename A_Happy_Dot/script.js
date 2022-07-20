@@ -394,11 +394,11 @@ function animateIce() {
   moveIcicles();
 }
 
-function animateForest(speed) {
+function animateForest() {
   animationID = requestAnimationFrame(animateForest);
   context.clearRect(0, 0, canvas.width, canvas.height);
   player.draw();
-  moveButterflies(speed);
+  moveButterflies();
   moveSqur();
 }
 
