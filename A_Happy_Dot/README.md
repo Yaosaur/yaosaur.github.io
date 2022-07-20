@@ -34,7 +34,7 @@ Additional features for the future:
 
 ## Where To Play
 
-The game can be played by clicking [here](https://yaosaur.github.io/a_happy_dot)
+The game can be played by clicking [here](https://yaosaur.github.io/A_Happy_Dot/)
 
 ## Contribution Guidelines
 
