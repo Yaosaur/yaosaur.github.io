@@ -4,7 +4,7 @@ A Happy Dot is a single player game about getting a lost emoji back home. The pl
 
 ## Demo of the First Stage
 
-![Demo of A Happy Dot](/A%20Happy%20Dot/images/Demo.gif)
+![Demo of A Happy Dot](/A_Happy_Dot/images/Demo.gif)
 
 ## Features
 
