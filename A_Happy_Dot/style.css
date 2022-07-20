@@ -11,6 +11,7 @@ body {
   font-family: "Fredoka One", cursive;
   color: white;
   overflow: hidden;
+  cursor: default;
 }
 
 .title {
@@ -52,6 +53,7 @@ canvas {
   border-radius: 10px;
   transition: 200ms;
   transform: scale(0);
+  cursor: none;
 }
 
 .instruct,
