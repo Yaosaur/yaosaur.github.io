@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Rubik+Moonrocks&family=VT323&display=swap");
+    </style>
+    <title>Space Wars</title>
+  </head>
+  <body>
+    <div class="header">
+      <div class="title">Space Wars</div>
+      <div class="instructions">Instructions</div>
+    </div>
+    <div class="gameboard">
+      <div class="gameplay">
+        Welcome aboard, Captain. As you know, Earth is getting invaded by a
+        swarm of alien ships. Thankfully the aliens are not very smart and will
+        only deploy one ship at a time. Press Battle to begin. After each ship
+        is destroyed you can choose to retreat or keep going.
+      </div>
+      <div class="playagain">
+        Thank you for saving us, Captain! Would you like to enlist for the next
+        mission? Or would you like try our virtual simulator?
+        <div class="nextbattle">Next Mission</div>
+        <div class="simulator">Simulator</div>
+        <div class="abort">Abort</div>
+        <div class="explanation"></div>
+      </div>
+      <div class="newgameplay">
+        <div>
+          I hope you had some rest, Captain. The aliens are back with bigger,
+          stronger ships. Don't worry. We have upgraded your ship's hull. Our
+          tech is still in progress, so its a random upgrade... On the bright
+          side, after defeating enemy ships, you will be able to salvage their
+          parts. These scraps can be used to repair your ship and purchase
+          upgrades at the end of the round. Also, we added a special missle on
+          your ship! It will do a ton of damage and will never miss...but it can
+          only be used once, so do be mindful of that. Good luck out there!
+        </div>
+        <div class="close">Close</div>
+      </div>
+      <div class="shop">
+        <p>
+          Welcome back, Captain. It must have been rough out there. I can fix or
+          upgrade your ship with scraps. Take a look at my services below.
+        </p>
+        <div class="repair">
+          <p>Repair</p>
+          <p>Cost 3 scraps</p>
+        </div>
+        <div class="tungstenMissles">
+          <p>Tungsten Missles</p>
+          <p>Cost 10 scraps</p>
+        </div>
+        <div class="sniperLens">
+          <p>Sniper Lens</p>
+          <p>Cost 5 scraps</p>
+        </div>
+        <div class="explanation2"></div>
+        <div class="close2">Close</div>
+      </div>
+      <div class="endGame">
+        <p>
+          Thank you, thank you, thank you, Captain! The aliens have been
+          defeated! Earth is saved! ...Or is it?
+        </p>
+      </div>
+      <div class="playership"><img src="images/playership.gif" alt="" /></div>
+      <div class="enemyship"><img src="images/enemyship1.gif" alt="" /></div>
+      <div class="playerstats">
+        <span class="playerName">Player Ship</span>
+        <span class="playerHull">Hull: 20</span>
+        <span class="playerFirepower">Firepower: 5</span>
+        <span class="playerAccuracy">Accuracy: 0.7</span>
+      </div>
+      <div class="alienstats">
+        <span class="alienShip">Alien Ship</span>
+        <span class="alienHull">Hull:</span>
+        <span class="alienFirepower">Firepower:</span>
+        <span class="alienAccuracy">Accuracy:</span>
+      </div>
+      <div class="battle"><p>Battle</p></div>
+      <div class="retreat"><p>Retreat</p></div>
+    </div>
+    <div class="gameflow">
+      <div class="UITop">
+        <div>
+          <span class="round">Round:</span>
+          <span class="scraps">Scraps:</span>
+          <span class="totaldestroyed">Total Ships Destroyed:</span>
+        </div>
+        <span class="logTitle">Battle Log</span>
+        <span class="shipsRemaining">Ships Remaining:</span>
+      </div>
+      <div id="theBomb"><p>Super Special Missle</p></div>
+    </div>
+  </body>
+  <script src="app.js"></script>
+</html>
