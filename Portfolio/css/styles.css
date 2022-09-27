@@ -4237,7 +4237,7 @@ button.btn--pill {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  background-image: url(../images/icons/icon-tag.svg);
+  background-image: url(../images/icon-tag.svg);
   position: absolute;
   left: 0;
   top: -0.15em;
@@ -4282,10 +4282,25 @@ button.btn--pill {
   left: 15rem;
 }
 
+.modal-popup__details_03 {
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: var(--text-sm);
+  line-height: calc(var(--vspace-1_5) - 2px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  border-radius: var(--border-radius);
+  padding: 0 1.4rem;
+  position: absolute;
+  top: var(--vspace-1_25);
+  left: 23.5rem;
+}
+
 .modal-popup__details:hover,
 .modal-popup__details:focus,
 .modal-popup__details_02:hover,
-.modal-popup__details_02:focus {
+.modal-popup__details_02:focus,
+.modal-popup__details_03:hover,
+.modal-popup__details_03:focus {
   background-color: var(--color-2-light);
   border-color: var(--color-2-light);
   color: white;
