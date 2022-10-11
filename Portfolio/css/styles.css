@@ -4439,7 +4439,7 @@ button.btn--pill {
   align-content: center;
   width: 100%;
   height: 100%;
-  column-gap: 100px;
+  column-gap: 75px;
 }
 
 .s-testimonials__header {
@@ -4456,6 +4456,7 @@ button.btn--pill {
   display: flex;
   flex-direction: column;
   text-align: center;
+  width: 100px;
 }
 
 /* ------------------------------------------------------------------- 
