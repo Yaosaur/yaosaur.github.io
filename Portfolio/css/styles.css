@@ -4145,6 +4145,12 @@ button.btn--pill {
   position: absolute;
 }
 
+#folio-item-0::after {
+  content: 'List Luxe';
+  left: 40%;
+  top: 50%;
+}
+
 #folio-item-1::after {
   content: 'Today';
   left: 40%;
